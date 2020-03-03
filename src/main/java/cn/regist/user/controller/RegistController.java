@@ -19,7 +19,7 @@ public class RegistController {
 
     @RequestMapping("/regist")
     public SysResult regist(@Valid User user, Errors erros) {
-
+//fsdfsd
         //--valid验证错误提示
         if (erros.hasErrors()) {
             StringBuilder sb = new StringBuilder();
