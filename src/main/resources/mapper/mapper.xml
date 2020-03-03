@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.regist.user.mapper.RegistMapper">
+    <select id="selectUserByPhone" resultType="int">
+        select count(phone) from regist where phone=#{phone};
+    </select>
+    <insert id="insertUser" parameterType="User">
+        insert into regist(id,name,password,phone) values(#{id},#{name},#{password},#{phone});
+    </insert>
+</mapper>
