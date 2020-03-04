@@ -1,5 +1,6 @@
 package org.example;
 
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;

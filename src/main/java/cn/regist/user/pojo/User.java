@@ -7,10 +7,7 @@ import javax.validation.constraints.Size;
 public class User {
     private String id;
     @NotNull
-    @Size(min = 4,max = 20,message = "请输入2-10个字")
-    private String name;
-    @NotNull
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]{8,18}$",message = "请输入8-18位的字母和数字")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[A-Za-z0-9]{8,18}$",message = "请输入8-18位的字母和数字的结合")
     private String password;
     @NotNull
     @Pattern(regexp = "^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$",message = "请输入正确的手机号")
@@ -18,9 +15,8 @@ public class User {
     public User() {
     }
 
-    public User(String id, String name, String password, String phone) {
+    public User(String id, String password, String phone) {
         this.id = id;
-        this.name = name;
         this.password = password;
         this.phone = phone;
     }
@@ -31,14 +27,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {
@@ -61,7 +49,6 @@ public class User {
     public String toString() {
         return "user{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", password=" + password +
                 ", phone=" + phone +
                 '}';

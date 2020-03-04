@@ -1,15 +1,16 @@
 package cn.regist.user.controller;
+
 import cn.regist.user.pojo.User;
 import cn.regist.user.service.RegistService;
+import cn.regist.user.utils.ValidUtil;
 import cn.regist.user.vo.SysResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/user")
@@ -17,30 +18,58 @@ public class RegistController {
     @Autowired
     private RegistService registService;
 
+    /**
+     * ajax手机号唯一性验证
+     *
+     * @param user
+     * @return 返回202不能注册，200能注册且发送验证码到手机
+     */
+    @RequestMapping("/phone")
+    public SysResult phone(User user, HttpSession session) {
+        return registService.phone(user);
+    }
+
+    /**
+     * 手机验证码比对
+     *
+     * @param verifi
+     * @return 返回202验证码有误，200验证码正确
+     */
+    @RequestMapping("/verifi")
+    public SysResult verifi(String verifi, HttpSession session) {
+        //获取seesion域
+        String code = (String) session.getAttribute("code");
+        //控制台打印属性
+        System.out.println("getSeesioncode:" + code);
+        System.out.println("verifi:" + verifi);
+        if (verifi != null && verifi.equals(code)) {
+            return SysResult.ok();
+        }
+        return SysResult.build(202, "验证码有误", null);
+    }
+
+    /**
+     * 注册功能实现
+     *
+     * @param user
+     * @param errors
+     * @return 返回202，注册失败，200注册成功
+     */
     @RequestMapping("/regist")
-    public SysResult regist(@Valid User user, Errors erros) {
-//fsdfsd
+    public SysResult regist(@Valid User user, Errors errors) {
         //--valid验证错误提示
-        if (erros.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            List<FieldError> ferrs = erros.getFieldErrors();
-            for (FieldError ferr : ferrs) {
-                String field = ferr.getField();//错误的字段
-                String emsg = ferr.getDefaultMessage();//错误的提示
-                sb.append("##[" + emsg + "]##<br>");//错误字段与错误提示的拼接
-            }
-            String errMsg = sb.toString();//转换数据
-            return SysResult.build(202, errMsg, null);
+        String errmsg = ValidUtil.validMsg(user, errors);
+        if (errmsg != null) {//errmsg内有值，说明信息有错误
+            return SysResult.build(202, errmsg, null);
         }
-            try {
-                System.out.println("1111111");
-                System.out.println(user.getPhone());
-                return registService.regist(user);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return SysResult.build(202, "注册失败", null);
-            }
+        try {
+            System.out.println(user.getPhone());
+            return registService.regist(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SysResult.build(202, "注册失败", null);
         }
+    }
 
 
 }

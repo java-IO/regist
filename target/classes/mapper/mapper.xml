@@ -7,6 +7,6 @@
         select count(phone) from regist where phone=#{phone};
     </select>
     <insert id="insertUser" parameterType="User">
-        insert into regist(id,name,password,phone) values(#{id},#{name},#{password},#{phone});
+        insert into regist(id,password,phone) values(#{id},#{password},#{phone});
     </insert>
 </mapper>
