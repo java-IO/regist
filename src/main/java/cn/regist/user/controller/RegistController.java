@@ -19,18 +19,19 @@ public class RegistController {
     private RegistService registService;
 
     /**
-     * ajax手机号唯一性验证
+     * ajax手机号唯一验证
      *
      * @param user
      * @return 返回202不能注册，200能注册且发送验证码到手机
      */
     @RequestMapping("/phone")
     public SysResult phone(User user, HttpSession session) {
+        System.out.println("1111");
         return registService.phone(user);
     }
 
     /**
-     * 手机验证码比对
+     * ajax手机验证码比对
      *
      * @param verifi
      * @return 返回202验证码有误，200验证码正确
