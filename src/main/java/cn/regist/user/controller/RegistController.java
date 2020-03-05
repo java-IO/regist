@@ -6,10 +6,15 @@ import cn.regist.user.utils.ValidUtil;
 import cn.regist.user.vo.SysResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -25,9 +30,20 @@ public class RegistController {
      * @return 返回202不能注册，200能注册且发送验证码到手机
      */
     @RequestMapping("/phone")
-    public SysResult phone(User user, HttpSession session) {
-        System.out.println("1111");
-        return registService.phone(user);
+    public SysResult phone(@Valid User user, Errors erros) {
+        boolean falg = true;
+        if (erros.hasErrors()) {
+            List<FieldError> ferrs = erros.getFieldErrors();
+            for (FieldError ferr : ferrs) {
+                String f = ferr.getField();//错误的字段
+                if (f.equals("phone"))//如果有这个字段，就不让进入数据库验证
+                    falg = false;
+            }
+        }
+        if (user.getPhone() != null && falg == true) {
+            return registService.phone(user);
+        }
+        return SysResult.build(202, "请输入正确的电话号码", null);
     }
 
     /**
