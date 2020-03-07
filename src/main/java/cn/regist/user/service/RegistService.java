@@ -26,9 +26,6 @@ public class RegistService {
      * @return 200可以注册并发送验证码，202不能注册
      */
     public SysResult phone(User user) {
-        //获取seesion域
-        //       HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        //       HttpSession session = httpServletRequest.getSession();
         //判断是不是唯一电话
         int phone = registMapper.selectUserByPhone(user.getPhone());
         if (phone >= 1) {

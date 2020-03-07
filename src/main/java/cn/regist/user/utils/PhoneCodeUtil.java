@@ -1,6 +1,7 @@
 package cn.regist.user.utils;
 
 
+import cn.regist.user.confi.ClusterConfig;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
@@ -10,23 +11,16 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.JedisCluster;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 public class PhoneCodeUtil {
-
+/*
+    @Autowired
+    private JedisCluster jedisCluster;
+*/
     private static String code;
-
-
-/*    public static void main(String[] args) {
-        String phone = "17323790285"; //此处可输入你的手机号码进行测试
-        getPhonemsg(phone);
-        System.out.println(code);
-    }*/
-
     /**
      * 阿里云短信服务配置
      * 接口调用处，传入手机号即可
@@ -36,9 +30,7 @@ public class PhoneCodeUtil {
      * @return
      */
     public static String getPhonemsg(String phone) {
-        //获取seesion域
-        HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpSession session = httpServletRequest.getSession();
+
         //进行正则关系校验
 
         /**
@@ -66,11 +58,13 @@ public class PhoneCodeUtil {
 
         //获取验证码
         code = vcode();
-        //验证码存入seesion域
-        session.setAttribute("code", code);
-        //打印验证码和seesion域内验证码
-        System.out.println("setSeesion----" + session.getAttribute("code"));
-        System.out.println("code----" + PhoneCodeUtil.code);
+        //不能直接注入，spring没有管理，手动new对象
+        JedisCluster jedisCluster = new ClusterConfig().initCluster();
+        // redis赋值，超时 时间为5分钟
+        jedisCluster.setex("title", 60 * 5, code);
+        //打印redis内验证码
+        System.out.println("发送验证码：" + jedisCluster.get("title"));
+
         IAcsClient acsClient = new DefaultAcsClient(profile);
         // 组装请求对象
         SendSmsRequest request = new SendSmsRequest();

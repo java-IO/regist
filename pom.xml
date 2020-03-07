@@ -28,6 +28,16 @@
     </parent>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+            <version>1.4.7.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
         <!--mybatis 1.3.0-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -59,7 +69,7 @@
         </dependency>
 
         <!--短信验证码-->
-        <dependency>
+<!--        <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
             <version>3.3.1</version>
@@ -72,8 +82,8 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180813</version><!--注意：20160810版本不支持JSONArray-->
-        </dependency>
+            <version>20180813</version>&lt;!&ndash;注意：20160810版本不支持JSONArray&ndash;&gt;
+        </dependency>-->
         <!-- 短信包-->
         <dependency>
             <groupId>com.aliyun</groupId>
