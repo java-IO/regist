@@ -5,7 +5,9 @@ import cn.regist.user.pojo.User;
 import cn.regist.user.service.RegistService;
 import cn.regist.user.utils.ValidUtil;
 import cn.regist.user.vo.SysResult;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +61,7 @@ public class RegistController {
      * @return 返回202，注册失败，200注册成功
      */
     @RequestMapping(value = "/regist", method = RequestMethod.POST)
-    public SysResult regist(@Valid User user, Errors errors,String auth) {
+    public SysResult regist(@Valid User user, Errors errors, String auth) {
         //new的jedis对象
         JedisCluster jedisCluster = new ClusterConfig().initCluster();
         //--valid验证错误提示
