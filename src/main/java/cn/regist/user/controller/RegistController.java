@@ -5,19 +5,12 @@ import cn.regist.user.pojo.User;
 import cn.regist.user.service.RegistService;
 import cn.regist.user.utils.ValidUtil;
 import cn.regist.user.vo.SysResult;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import redis.clients.jedis.JedisCluster;
 
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
